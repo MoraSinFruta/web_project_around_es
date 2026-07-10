@@ -1,6 +1,3 @@
-// 1. Verificación de conexión en la consola
-console.log("¡El script index.js se ha conectado correctamente!");
-
 // --- SELECCIÓN DE ELEMENTOS DEL DOM ---
 
 // Elementos del perfil y formulario de edición
@@ -21,7 +18,7 @@ const cardForm = document.querySelector("#new-card-form");
 const placeNameInput = document.querySelector(".popup__input_type_card-name");
 const placeLinkInput = document.querySelector(".popup__input_type_url");
 
-// Elementos del modal de apertura de Imagen (Grande)
+// Elementos del modal de apertura de Imagen
 const imagePopup = document.querySelector("#image-popup");
 const imagePopupCloseButton = imagePopup.querySelector(".popup__close");
 const imagePopupPicture = imagePopup.querySelector(".popup__image");
@@ -31,7 +28,7 @@ const imagePopupCaption = imagePopup.querySelector(".popup__caption");
 const cardsContainer = document.querySelector('.cards__list');
 const cardTemplate = document.querySelector('#card-template').content;
 
-// 2. Array de tarjetas iniciales (initialCards)
+// Array de tarjetas iniciales
 const initialCards = [
   {
     name: "Valle de Yosemite",
@@ -61,49 +58,36 @@ const initialCards = [
 
 // --- FUNCIONES PARA GENERAR Y RENDERIZAR TARJETAS ---
 
-
 function handleLikeClick(evt) {
   evt.target.classList.toggle('card__like-button_is-active');
 }
-
 
 function handleDeleteClick(evt) {
   const cardElement = evt.target.closest('.card');
   cardElement.remove();
 }
 
-
 function handleImagePreviewClick(name, link) {
-  
   imagePopupPicture.src = link;
   imagePopupPicture.alt = name;
   imagePopupCaption.textContent = name;
-  
   openModal(imagePopup);
 }
 
-// FUNCIÓN: Crea el elemento clonando el template y configurando sus eventos
 function getCardElement({ name = "Sin título", link = "./images/placeholder.jpg" } = {}) {
-  
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
-  
   const cardImage = cardElement.querySelector('.card__image');
   const cardTitle = cardElement.querySelector('.card__title');
-  
-  
   const likeButton = cardElement.querySelector('.card__like-button');
   const deleteButton = cardElement.querySelector('.card__delete-button');
 
- 
   cardTitle.textContent = name;
   cardImage.src = link;
   cardImage.alt = name;
 
-  
   likeButton.addEventListener('click', handleLikeClick);
   deleteButton.addEventListener('click', handleDeleteClick);
   
-
   cardImage.addEventListener('click', () => {
     handleImagePreviewClick(name, link);
   });
@@ -116,8 +100,8 @@ function renderCard(name, link, container) {
   container.prepend(cardElement);
 }
 
-// Renderizar las tarjetas iniciales
-initialCards.forEach((card) => {
+// CORREGIDO: Renderizar recorriendo el array de atrás hacia adelante para preservar el orden original con prepend
+initialCards.toReversed().forEach((card) => {
   renderCard(card.name, card.link, cardsContainer);
 });
 
@@ -141,7 +125,7 @@ function handleOpenEditModal() {
   openModal(editPopup);
 }
 
-// CONTROLADORES DE ENVÍO DE FORMULARIOS (HANDLERS)
+// CONTROLADORES DE ENVÍO DE FORMULARIOS
 
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
@@ -163,11 +147,9 @@ function handleCardFormSubmit(evt) {
 
 // --- EVENT LISTENERS ---
 
-
 editButton.addEventListener('click', handleOpenEditModal);
 profileCloseButton.addEventListener('click', () => closeModal(editPopup));
 profileForm.addEventListener('submit', handleProfileFormSubmit);
-
 
 addButton.addEventListener('click', () => openModal(newCardPopup));
 cardCloseButton.addEventListener('click', () => closeModal(newCardPopup));

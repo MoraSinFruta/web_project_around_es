@@ -1,7 +1,7 @@
 # Around The U.S.
 
 ## Enlace del Proyecto
-* [Ver proyecto en vivo en GitHub Pages](AQUÍ_PEGA_TU_ENLACE_DE_GITHUB_PAGES)
+* [Ver proyecto en vivo en GitHub Pages](https://morasinfruta.github.io/web_project_around_es/)
 
 ## Descripción del Proyecto
 Este proyecto es una aplicación web interactiva que permite a los usuarios compartir fotografías de diversos lugares, darles "Me gusta", eliminar elementos de la galería y administrar la información de su propio perfil a través de ventanas emergentes dinámicas.
