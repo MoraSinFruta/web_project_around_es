@@ -136,3 +136,35 @@
     background-size: 8px 8px;
   }
 }
+
+/* Estilo base para los mensajes de error */
+.popup__error {
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 12px;
+  line-height: 15px;
+  color: #ff0000;
+  display: block;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  min-height: 15px; /* Evita que el formulario "salte" al mostrar el error */
+  visibility: hidden;
+}
+
+/* Clase activa para hacer visible el error */
+.popup__error_visible {
+  visibility: visible;
+}
+
+/* Borde rojo para los inputs que no pasen la validación */
+.popup__input_type_error {
+  border-bottom: 1px solid #ff0000;
+}
+
+/* Estado del botón "Guardar" cuando está desactivado */
+.popup__button.popup__button_disabled {
+  background-color: transparent !important;
+  border: 1px solid rgba(0, 0, 0, 0.2) !important;
+  color: rgba(0, 0, 0, 0.2) !important;
+  cursor: default;
+  pointer-events: none; /* Evita que responda a los clics */
+}

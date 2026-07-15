@@ -1,3 +1,6 @@
+// Importación correcta de funciones desde el módulo de validación
+import { enableValidation, setEventListeners, resetValidation } from "./validate.js";
+
 // --- SELECCIÓN DE ELEMENTOS DEL DOM ---
 
 // Elementos del perfil y formulario de edición
@@ -21,8 +24,8 @@ const placeLinkInput = document.querySelector(".popup__input_type_url");
 // Elementos del modal de apertura de Imagen
 const imagePopup = document.querySelector("#image-popup");
 const imagePopupCloseButton = imagePopup.querySelector(".popup__close");
-const imagePopupPicture = imagePopup.querySelector(".popup__image");
-const imagePopupCaption = imagePopup.querySelector(".popup__caption");
+const imagePopupPicture = document.querySelector(".popup__image");
+const imagePopupCaption = document.querySelector(".popup__caption");
 
 // Contenedores de la galería
 const cardsContainer = document.querySelector('.cards__list');
@@ -100,19 +103,31 @@ function renderCard(name, link, container) {
   container.prepend(cardElement);
 }
 
-// CORREGIDO: Renderizar recorriendo el array de atrás hacia adelante para preservar el orden original con prepend
+// Renderizar recorriendo el array de atrás hacia adelante para preservar el orden original con prepend
 initialCards.toReversed().forEach((card) => {
   renderCard(card.name, card.link, cardsContainer);
 });
 
 // --- FUNCIONES REUTILIZABLES DE MODALES ---
 
+// El detector de teclado para cerrar con Esc se añade al abrir y se remueve al cerrar
+function handleEscClose(evt) {
+  if (evt.key === "Escape") {
+    const openedPopup = document.querySelector(".popup_is-opened");
+    if (openedPopup) {
+      closeModal(openedPopup);
+    }
+  }
+}
+
 function openModal(modal) {
   modal.classList.add('popup_is-opened');
+  document.addEventListener('keydown', handleEscClose);
 }
 
 function closeModal(modal) {
   modal.classList.remove('popup_is-opened');
+  document.removeEventListener('keydown', handleEscClose);
 }
 
 function fillProfileForm() {
@@ -122,7 +137,26 @@ function fillProfileForm() {
 
 function handleOpenEditModal() {
   fillProfileForm(); 
+  
+  // Reseteamos y limpiamos validaciones del formulario de edición al abrirlo
+  resetValidation(profileForm);
+  
   openModal(editPopup);
+}
+
+function handleOpenAddCardModal() {
+  cardForm.reset();
+
+  // Reseteamos y limpiamos validaciones del formulario de agregar tarjetas al abrirlo
+  resetValidation(cardForm);
+
+  openModal(newCardPopup);
+}
+
+function handleOverlayClick(evt) {
+  if (evt.target === evt.currentTarget) {
+    closeModal(evt.currentTarget);
+  }
 }
 
 // CONTROLADORES DE ENVÍO DE FORMULARIOS
@@ -145,14 +179,23 @@ function handleCardFormSubmit(evt) {
   closeModal(newCardPopup);
 }
 
+// Inicialización de la validación global
+enableValidation();
+
 // --- EVENT LISTENERS ---
 
+// Eventos para el perfil modal
 editButton.addEventListener('click', handleOpenEditModal);
 profileCloseButton.addEventListener('click', () => closeModal(editPopup));
 profileForm.addEventListener('submit', handleProfileFormSubmit);
+editPopup.addEventListener('click', handleOverlayClick);
 
-addButton.addEventListener('click', () => openModal(newCardPopup));
+// Eventos para el modal de agregar tarjetas
+addButton.addEventListener('click', handleOpenAddCardModal);
 cardCloseButton.addEventListener('click', () => closeModal(newCardPopup));
 cardForm.addEventListener('submit', handleCardFormSubmit);
+newCardPopup.addEventListener('click', handleOverlayClick);
 
+// Eventos para el modal de la imagen grande
 imagePopupCloseButton.addEventListener('click', () => closeModal(imagePopup));
+imagePopup.addEventListener('click', handleOverlayClick);
