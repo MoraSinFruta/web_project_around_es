@@ -104,7 +104,8 @@
 
 .popup__image {
   max-width: 100%;
-  object-fit: cover;
+  max-height: 75vh;
+  object-fit: contain;
 }
 
 .popup__caption {
